@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: copa_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: copa_admin
+      POSTGRES_PASSWORD: copa2026
+      POSTGRES_DB: copa_do_mundo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/05.DDL.sql:/docker-entrypoint-initdb.d/01-ddl.sql
+      - ./sql/06.DML.sql:/docker-entrypoint-initdb.d/02-dml.sql
+
+volumes:
+  pgdata:
