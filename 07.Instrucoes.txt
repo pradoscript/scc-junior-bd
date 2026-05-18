@@ -1,0 +1,59 @@
+SCC0640 - Bases de Dados
+Projeto Final: Sistema de Gerenciamento de Copas do Mundo FIFA
+
+================================================================
+Membros do grupo
+================================================================
+- Nome1 - João Victor do Prado Souza (15582071)
+
+================================================================
+Como executar
+================================================================
+
+1. Pre-requisitos:
+   - Docker + Docker Compose
+   - Python 3.10+
+   - Ollama (https://ollama.com) com um modelo baixado
+
+2. Subir o banco:
+   $ cp .env.example .env       # ajustar senha se quiser
+   $ docker compose up -d
+   O Postgres ja roda o DDL (sql/05.DDL.sql) e o DML (sql/06.DML.sql)
+   automaticamente na primeira subida.
+
+3. Instalar as dependencias do prototipo:
+   $ pip install -r prototipo/requirements.txt
+
+4. Baixar o modelo do Ollama (uma vez):
+   $ ollama pull llama3.2
+
+5. Executar o prototipo:
+   $ python prototipo/main.py
+   Use os defaults do .env ou informe: host=localhost, porta=5432,
+   banco=copa_do_mundo, user=copa_admin, senha=<sua_senha>.
+
+================================================================
+Estrutura entregue
+================================================================
+01.Diagrama-ER.pdf       diagrama entidade-relacionamento
+02.Modelo-Relacional.pdf modelo relacional
+03.Regras-Negocio.pdf    regras de negocio
+04.Decisoes-Projeto.pdf  decisoes de projeto e justificativas
+05.DDL.sql               criacao do esquema (tabelas, dominios, triggers)
+06.DML.sql               carga de dados (Copas 2018 e 2022)
+07.Instrucoes.txt        este arquivo
+prototipo/               codigo do prototipo Python
+scripts/gerar_dml.py     gerador do 06.DML.sql (reproducivel)
+docker-compose.yml       servico do Postgres
+.env.example             modelo de configuracao
+
+================================================================
+Observacoes
+================================================================
+- O DDL define 5 triggers, 7 dominios e todas as FKs com ON DELETE/UPDATE.
+- O DML cobre as Copas de 2018 (Russia) e 2022 (Catar) com resultados
+  reais do mata-mata. A fase de grupos usa placares aleatorios determinisicos
+  (seed fixa em scripts/gerar_dml.py).
+- As 10 consultas estao implementadas em prototipo/queries.py.
+- O item 11 do menu usa Ollama para traduzir portugues em SQL; se o servico
+  estiver fora do ar, o programa avisa e segue funcionando.
