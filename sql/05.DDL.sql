@@ -204,7 +204,7 @@ CREATE TABLE Partida (
   GolsTime1          SMALLINT NOT NULL DEFAULT 0 CHECK (GolsTime1 >= 0),
   GolsTime2          SMALLINT NOT NULL DEFAULT 0 CHECK (GolsTime2 >= 0),
   TemProrrogacao     BOOLEAN NOT NULL DEFAULT FALSE,
-  ResultadoPenaltis  VARCHAR(20),
+  ResultadoPenaltis  VARCHAR(50),
   IdClassificado     INTEGER,
   IdFase             INTEGER NOT NULL,
   IdEstadio          INTEGER NOT NULL,
