@@ -9,14 +9,14 @@ Cada entrada de CONSULTAS contem:
 
 CONSULTAS = [
     {
-        "titulo": "Listar todas as edicoes da Copa (ano, sedes, campea, vice, 3o)",
+        "titulo": "Listar todas as edicoes da Copa (ano, pais-sede, campea, vice, 3o)",
         "sql": """
             SELECT
               e.Ano,
+              STRING_AGG(DISTINCT c.Pais, ', ' ORDER BY c.Pais) AS PaisSede,
               s_campea.NomePais AS Campea,
               s_vice.NomePais   AS Vice,
-              s_3o.NomePais     AS Terceiro,
-              STRING_AGG(c.NomeCidade, ', ' ORDER BY c.NomeCidade) AS Sedes
+              s_3o.NomePais     AS Terceiro
             FROM EdicaoCopa e
             LEFT JOIN Selecao s_campea ON s_campea.IdSelecao = e.IdCampea
             LEFT JOIN Selecao s_vice   ON s_vice.IdSelecao   = e.IdVice

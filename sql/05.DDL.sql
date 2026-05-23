@@ -68,6 +68,11 @@ CREATE TABLE EdicaoCopa (
   IdVice       INTEGER,
   IdTerceiro   INTEGER,
   CONSTRAINT ck_edicao_datas CHECK (DataTermino >= DataInicio),
+  CONSTRAINT ck_edicao_podio CHECK (
+    (IdCampea <> IdVice OR IdCampea IS NULL OR IdVice IS NULL) AND
+    (IdCampea <> IdTerceiro OR IdCampea IS NULL OR IdTerceiro IS NULL) AND
+    (IdVice <> IdTerceiro OR IdVice IS NULL OR IdTerceiro IS NULL)
+  ),
   CONSTRAINT fk_edicao_campea
     FOREIGN KEY (IdCampea) REFERENCES Selecao(IdSelecao)
     ON DELETE SET NULL ON UPDATE CASCADE,
@@ -190,6 +195,7 @@ CREATE TABLE Convocacao (
   NumeroCamisa  SMALLINT NOT NULL CHECK (NumeroCamisa BETWEEN 1 AND 99),
   PRIMARY KEY (AnoCopa, IdSelecao, IdJogador),
   CONSTRAINT uq_convocacao_camisa UNIQUE (AnoCopa, IdSelecao, NumeroCamisa),
+  CONSTRAINT uq_convocacao_jogador_edicao UNIQUE (AnoCopa, IdJogador),
   CONSTRAINT fk_conv_part
     FOREIGN KEY (AnoCopa, IdSelecao) REFERENCES Participacao(AnoCopa, IdSelecao)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -211,6 +217,7 @@ CREATE TABLE Partida (
   IdSelecao1         INTEGER NOT NULL,
   IdSelecao2         INTEGER NOT NULL,
   CONSTRAINT ck_partida_selecoes CHECK (IdSelecao1 <> IdSelecao2),
+  CONSTRAINT ck_partida_classificado CHECK (IdClassificado IS NULL OR IdClassificado IN (IdSelecao1, IdSelecao2)),
   CONSTRAINT fk_partida_fase
     FOREIGN KEY (IdFase) REFERENCES Fase(IdFase)
     ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -457,3 +464,61 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_check_cartoes_jogador
   BEFORE INSERT OR UPDATE ON Cartao
   FOR EACH ROW EXECUTE FUNCTION fn_check_cartoes_jogador();
+
+-- Trigger 6: garantir que partidas eliminatorias tenham time classificado,
+-- e partidas da fase de grupos nao tenham classificado
+CREATE OR REPLACE FUNCTION fn_check_classificado_eliminatoria()
+RETURNS TRIGGER AS $$
+DECLARE
+  v_tipo_fase dom_tipo_fase;
+BEGIN
+  SELECT Tipo INTO v_tipo_fase FROM Fase WHERE IdFase = NEW.IdFase;
+  
+  -- Se for eliminatoria, exige o classificado
+  IF v_tipo_fase <> 'fase_de_grupos' AND NEW.IdClassificado IS NULL THEN
+    RAISE EXCEPTION 'Partidas eliminatorias devem indicar a selecao classificada';
+  END IF;
+  
+  -- Se for fase de grupos, impede ter classificado
+  IF v_tipo_fase = 'fase_de_grupos' AND NEW.IdClassificado IS NOT NULL THEN
+    RAISE EXCEPTION 'Partidas de fase de grupos nao devem ter selecao classificada';
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_classificado_eliminatoria
+  BEFORE INSERT OR UPDATE ON Partida
+  FOR EACH ROW EXECUTE FUNCTION fn_check_classificado_eliminatoria();
+
+-- Trigger 7: garantir que o estadio da partida pertença a uma cidade-sede daquela edicao
+CREATE OR REPLACE FUNCTION fn_check_estadio_cidade_sede()
+RETURNS TRIGGER AS $$
+DECLARE
+  v_ano SMALLINT;
+  v_id_cidade INTEGER;
+  v_exists INTEGER;
+BEGIN
+  -- 1. Obter o ano da copa correspondente à fase da partida
+  SELECT AnoCopa INTO v_ano FROM Fase WHERE IdFase = NEW.IdFase;
+  
+  -- 2. Obter o ID da cidade do estádio selecionado
+  SELECT IdCidade INTO v_id_cidade FROM Estadio WHERE IdEstadio = NEW.IdEstadio;
+  
+  -- 3. Verificar se a cidade sedia a copa naquele ano
+  SELECT COUNT(*) INTO v_exists FROM EdicaoCidade 
+    WHERE AnoCopa = v_ano AND IdCidade = v_id_cidade;
+    
+  IF v_exists = 0 THEN
+    RAISE EXCEPTION 'O estadio % nao esta localizado em uma cidade-sede cadastrada para a Copa de %', 
+      NEW.IdEstadio, v_ano;
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_estadio_cidade_sede
+  BEFORE INSERT OR UPDATE ON Partida
+  FOR EACH ROW EXECUTE FUNCTION fn_check_estadio_cidade_sede();

@@ -5,6 +5,7 @@ Projeto Final: Sistema de Gerenciamento de Copas do Mundo FIFA
 Membros do grupo
 ================================================================
 - Nome1 - João Victor do Prado Souza (15582071)
+- Nome2 - Daniel Dias Silva Filho (13677114)
 
 ================================================================
 Como executar
