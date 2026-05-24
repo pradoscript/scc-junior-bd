@@ -17,5 +17,15 @@ services:
       - ./sql/05.DDL.sql:/docker-entrypoint-initdb.d/01-ddl.sql
       - ./sql/06.DML.sql:/docker-entrypoint-initdb.d/02-dml.sql
 
+  ollama:
+    image: ollama/ollama
+    container_name: copa_ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
 volumes:
   pgdata:
+  ollama_data:
