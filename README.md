@@ -37,31 +37,32 @@ Se você tiver uma sugestão que tornaria este projeto melhor, por favor, faça 
 5. Abra um Pull Request
 
 
-## Authors
+## Autores
 
 <table>
   <tr>
 	</td>
     <td align="center" style="border: none;">
       <a href="#" title="defina o titulo do link">
-        <img src="[https://avatars.githubusercontent.com/u/105086952?v=4](https://avatars.githubusercontent.com/u/74215243?v=4)" width="100px><br>
+        <img src="https://avatars.githubusercontent.com/u/74215243?v=4" width="100px;" ><br>
         <sub>
-          <b>Daniel Dias Silva Filho <br></b>
+          <b>Daniel Dias<br></b>
         </sub>
       </a>
     </td>
     <td align="center" style="border: none;">
       <a href="https://www.linkedin.com/in/guaraujoc/" title="https://www.linkedin.com/in/guaraujoc/">
-        <img src="https://avatars.githubusercontent.com/u/130992375?s=400&u=168448c320a3ad61a9737a30880fa942249baedc&v=4" width="100px;"  style="border-radius: 50%><br>
+        <img src="https://avatars.githubusercontent.com/u/130992375?s=400&u=168448c320a3ad61a9737a30880fa942249baedc&v=4" width="100px;"  style="border-radius: 50%;"><br>
+		  <sub>
+          <b>Gustavo Araújo <br></b>
         </sub>
       </a>
     </td>
     <td align="center" style="border: none;">
       <a href="#" title="defina o titulo do link">
-        <img src="[https://avatars.githubusercontent.com/u/62862399?v=4](https://avatars.githubusercontent.com/u/171309545?v=4)" width="100px; style="border-radius: 50%;"><br>
+        <img src="https://avatars.githubusercontent.com/u/171309545?v=4" width="100px;" alt="Foto do Mark Zuckerberg" style="border-radius: 50%;"><br>
         <sub>
-          <b>João Victor do Prado Souza<br></b>
-		  <span style="color:grey;">Nusp-</span>
+          <b>João Prado<br></b>
         </sub>
       </a>
 	<td align="center" style="border: none;">
@@ -69,11 +70,11 @@ Se você tiver uma sugestão que tornaria este projeto melhor, por favor, faça 
         <img src="" width="100px;"  style="border-radius: 50%;"><br>
         <sub>
           <b>Matheus<br></b>
-		  <span style="color:grey;">Nusp-</span>
         </sub>
       </a>
     </td>
 	</td>
+	
 
   </tr>
 </table>
