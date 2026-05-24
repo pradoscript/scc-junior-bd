@@ -1,12 +1,12 @@
 # Gerenciamento da copa do mundo
 
-## Descriçaõ
+## Descrição
 
 Este projeto consiste no desenvolvimento de um banco de dados para o gerenciamento de uma Copa do Mundo, com o objetivo de organizar, armazenar e consultar informações relacionadas ao torneio de forma estruturada e eficiente. O sistema foi projetado para contemplar entidades fundamentais de uma competição esportiva internacional, como seleções, jogadores, estádios, partidas, grupos, fases eliminatórias, árbitros e eventos ocorridos durante os jogos.
 
 Além da modelagem e implementação do banco de dados, o projeto busca garantir a integridade e consistência das informações, permitindo o controle de regras específicas da competição, como classificação por grupos, confrontos eliminatórios, registro de resultados e acompanhamento estatístico do campeonato. Dessa forma, o sistema serve como base para o gerenciamento completo de uma Copa do Mundo, facilitando consultas, análises e administração dos dados do torneio.
 
-## Getting started
+## Primeiros passos
 
 O proejto apresenta alguns requisitos para o seu funcionamento pleno.
 
